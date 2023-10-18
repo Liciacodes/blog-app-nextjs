@@ -3,7 +3,10 @@ import { Inter } from "next/font/google";
 import { Quicksand } from "next/font/google";
 import Navbar from "./components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: "100",
+});
 const quicksand = Quicksand({ weight: "300", subsets: ["latin"] });
 
 export const metadata = {
@@ -14,7 +17,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className=" mx-6 lg:mx-10 ">
+      <body className={`${inter.className} ${inter.weight} mx-6 lg:mx-10 `}>
         <Navbar />
         {children}
       </body>
