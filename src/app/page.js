@@ -6,27 +6,26 @@ import Image from "next/image";
 import BlogCardDetails from "./components/BlogCardDetails";
 import BlogCardBottomDetails from "./components/BlogCardBottomDetails";
 import Link from "next/link";
-import GetAllPost from "./libs/getAllPosts";
 import CategoryFilter from "./components/CategoryFilter";
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [filteredData, setfilteredData] = useState([]);
   const [selectedCategory, setselectedCategory] = useState("");
-  // const posts = await GetAllPost();
+
   const categories = [
-    { id: 1, name: "everything" },
-    { id: 2, name: "top-headlines" },
+    { id: 1, name: "apple" },
+    { id: 2, name: "tesla" },
   ];
 
   useEffect(() => {
     fetch(
-      `https://newsapi.org/v2/everything&apiKey=150c432dd7f74f579722ea083695aede`
+      `https://newsapi.org/v2/everything?q=${selectedCategory}&apiKey=150c432dd7f74f579722ea083695aede`
     )
       .then((response) => response.json())
       .then((data) => {
         setData(data.articles);
-        setfilteredData(data).articles;
+        setfilteredData(data.articles);
       });
   }, [selectedCategory]);
 
@@ -34,20 +33,22 @@ export default function Home() {
     const category = e.target.value;
     setselectedCategory(category);
 
-    if (category === "everything") {
+    if (category === "tesla" || category === "apple") {
       setfilteredData(data);
     } else {
-      const filtered = data.filter((item) => item.category === category);
+      const filtered = data?.filter(
+        (item) => item.category === selectedCategory
+      );
       setfilteredData(filtered);
     }
   };
 
-  // console.log(filteredData);
-
   return (
     <div className="flex flex-col">
       <div className=" text-white border border-white border-t-0 border-r-0 border-l-0 w-full h-32 flex items-center justify-center ">
-        <h1 className="text-7xl lg:text-8xl font-extrabold">THE BLOG</h1>
+        <h1 className=" text-4xl md:text-7xl lg:text-8xl font-extrabold">
+          THE BLOG
+        </h1>
       </div>
       <section className="flex lg:flex-row flex-col py-8 gap-8 lg:gap-2 h-[82rem] sm:h-[60rem]  lg:h-[30rem]">
         <div className="lg:w-[50%] w-full p-4">
@@ -66,21 +67,10 @@ export default function Home() {
             Go to Top Stories
           </Link>
         </div>
-        <div className="flex flex-col w-full lg:w-[50%]  lg:h-[30rem] px-4 border border-white border-b-0 border-r-0 border-l-0 lg:border-none mt-8 lg:mt-0">
+        <div className="flex flex-col w-full lg:w-[50%] lg:h-[30rem] px-4 border border-white border-b-0 border-r-0 border-l-0 lg:border-none mt-8 lg:mt-0">
           <p className="text-pink-500 text-xl mt-2 lg:text-3xl lg:mt-0">
             Trending Now
           </p>
-          {/* {newPosts.sources.map((newPost) => {
-            return (
-              <BlogCardDetails
-                src={newPost.urlToImage}
-                // height={100}
-                // width={200}
-                title={newPost.name}
-                timePosted={newPost.description}
-              />
-            );
-          })} */}
 
           <BlogCardDetails
             src={christin}
@@ -107,7 +97,7 @@ export default function Home() {
       </section>
 
       {/* Search bar For Filtering Results */}
-      <div className=" bg-white mt-20">
+      <div className=" bg-white mt-0 lg:mt-20">
         <div className="text-black font-bold text-2xl px-4 py-6">
           <div className="text-black">
             <div>
@@ -121,20 +111,15 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* bottom grids   height={100} width={200}*/}
-
         <section className="grid grid-cols-2 grid-rows-2 lg:grid-cols-4 lg:grid-rows-1  w-full mb-12">
-          {filteredData.map((data, index) => {
-            const { urlToImage, title, publishedAt } = data;
+          {filteredData?.map((data, index) => {
             return (
-              <Link href="/users" className="hover:text-blue-700">
+              <Link href="/users" className="hover:text-blue-700" key={index}>
                 <BlogCardBottomDetails
-                  src={urlToImage}
-                  alt={title}
-                  key={index}
-                  title={title}
-                  timePosted={publishedAt}
+                  src={data.urlToImage}
+                  alt={data.title}
+                  title={data.title}
+                  timePosted={data.publishedAt}
                 />
               </Link>
             );

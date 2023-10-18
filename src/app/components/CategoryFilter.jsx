@@ -1,13 +1,11 @@
 function CategoryFilter({ categories, selectedCategory, onCategoryChange }) {
-  //   const category ={ [ name: "Everything" ], [name: "Top-headlines" ]};
-
   return (
     <>
       <label className="mr-4 text-black">Filter By Category:</label>
       <select
         value={selectedCategory}
         onChange={onCategoryChange}
-        className="text-pink-500 border-none mx-2 "
+        className="text-pink-500 outline-none"
       >
         {/* <option value="">All Categories</option> */}
         {categories.map((category) => (
